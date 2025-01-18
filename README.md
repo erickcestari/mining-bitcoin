@@ -7,7 +7,7 @@ The goal of this project is to remine the mythic block 170 containing the first 
 - Your block should include exactly two transactions: the coinbase transaction you will build yourself and the transaction whose hex serialization is available in the file `data/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16.txt`
 - Your block should be version 1.
 - The previous block hash is `000000002a22cfee1f2c846adbd12b3e183d4f97683f85dad08a79780a84bd55`.
-- The difficulty target should be `0x1d00ffff` (minimum difficulty in mainnet).
+- The difficulty target should be `0xae77031e` (minimum difficulty in signet).
 - Your block should present a valid merkle root.
 - The block timestamp should not be earlier than 2009-01-12 01:22:03 UTC and no later than 2h in the future from the time you mine your block.
 
@@ -22,7 +22,7 @@ The goal of this project is to remine the mythic block 170 containing the first 
 
 ## How to check your implementation
 
-You can recreate the historical block 170 using `timestamp = 0x496ab951 = Monday, 12 January 2009 03:30:25 GMT` in your block header and the coinbase transaction data included in `b1fea52486ce0c62bb442b530a3f0132b826c74e473d1f2c220bfa78111c5082.txt`.
+You can recreate the historical block 170 using `timestamp = 0x496ab951 = Monday, 12 January 2009 03:30:25 GMT` and `difficulty = ffff001d` (minimum difficulty in mainnet) in your block header and the coinbase transaction data included in `b1fea52486ce0c62bb442b530a3f0132b826c74e473d1f2c220bfa78111c5082.txt`. Note that the minumum difficulty in mainnet is still quite challenging for CPU mining and might take dozens of minutes to compute in a modern machine if you are using a high level language such as Python.
 
 This approach provides a path to validate your implementation because you can check your result against the blockchain data shown below (this may be particularly useful for checking your merkle root implementation and the difficulty targeting).
 
@@ -44,7 +44,7 @@ You MAY import a hashing library to access functions like sha256, but you MAY NO
 
 ## Example output
 
-The following is the serialization of block 170 mined by Satoshi itself. It won't pass the `anyone_can_spend` test. You can use this to check your implementation, but don't try to work backwards from it since changing a bit here will invalidate the merkle root and the proof of work of the block (or maybe try it to get a feel for the security model of the protocol yourself). Beware of unintentional EOL characters at your solution.
+The following is the serialization of block 170 mined by Satoshi itself. It won't pass the `anyone_can_spend` test but it will have the required proof of work. You can use this to check your implementation, but don't try to work backwards from it since changing a bit here will invalidate the merkle root and the proof of work of the block (or maybe try it to get a feel for the security model of the protocol yourself). Beware of unintentional EOL characters at your solution.
 
 ``` shell
 $ cat solution/block.txt
