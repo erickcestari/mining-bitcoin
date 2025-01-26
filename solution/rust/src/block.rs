@@ -3,7 +3,6 @@ use crate::{block_header::BlockHeader, transaction::Transaction, utils, BitcoinE
 #[derive(Debug)]
 pub struct Block {
     pub block_header: BlockHeader,
-    pub transaction_count: u64,
     pub transactions: Vec<Transaction>,
 }
 
@@ -31,7 +30,6 @@ impl Block {
         Ok(Self {
             block_header,
             transactions,
-            transaction_count,
         })
     }
 }
@@ -48,7 +46,6 @@ mod tests {
         let block = Block::deserialize(&payload_block).unwrap();
 
         assert_eq!(block.block_header.version, 1);
-        assert_eq!(block.transaction_count, 1);
         assert_eq!(block.block_header.timestamp, 1231469665);
         assert_eq!(block.block_header.bits, 486604799);
         assert_eq!(block.block_header.nonce, 2573394689);
