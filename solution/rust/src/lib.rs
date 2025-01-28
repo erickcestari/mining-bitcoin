@@ -1,13 +1,15 @@
 mod block;
 mod block_header;
 mod error;
+mod merkle_root;
 mod transaction;
 mod utils;
 
 pub use block::Block;
 pub use block_header::BlockHeader;
 pub use error::{BitcoinError, Result};
-pub use transaction::Transaction;
+pub use merkle_root::MerkleRoot;
+pub use transaction::{OutPoint, Transaction, TransactionInput, TransactionOutput};
 
 pub const DIFFICULTY_TARGET: u32 = 0xae77031e;
 pub const PREVIOUS_BLOCK_HASH: &str =

@@ -10,6 +10,10 @@ pub fn calculate_checksum(payload: &[u8]) -> [u8; 4] {
     checksum
 }
 
+pub fn double_sha256(payload: &[u8]) -> [u8; 32] {
+    Sha256::digest(Sha256::digest(payload)).into()
+}
+
 pub fn encode_varint(value: u64) -> Vec<u8> {
     let mut result = Vec::new();
     if value < 0xFD {
