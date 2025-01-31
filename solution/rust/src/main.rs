@@ -1,9 +1,8 @@
 use mine_block::{
-    Block, BlockHeader, MerkleRoot, OutPoint, Transaction, TransactionInput, TransactionOutput,
-    DIFFICULTY_TARGET, PREVIOUS_BLOCK_HASH, TRANSACTION_SERIALIZED,
+    Block, BlockHeader, MerkleRoot, Miner, OutPoint, Transaction, TransactionInput,
+    TransactionOutput, DIFFICULTY_TARGET, PREVIOUS_BLOCK_HASH, TRANSACTION_SERIALIZED,
 };
 use std::time::{SystemTime, UNIX_EPOCH};
-
 fn main() {
     let transaction_payload = hex::decode(TRANSACTION_SERIALIZED).unwrap();
     let transaction = Transaction::deserialize(&transaction_payload).unwrap();
@@ -55,5 +54,16 @@ fn main() {
     let block = Block {
         block_header,
         transactions: vec![coinbase_transaction, transaction],
+    };
+
+    let miner = Miner::new(block);
+    let block_mined = miner.mine();
+    match block_mined {
+        Some(block) => {
+            println!("valid block found {:?}", block);
+        }
+        None => {
+            println!("No valid block found");
+        }
     };
 }

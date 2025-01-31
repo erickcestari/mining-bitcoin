@@ -1,6 +1,6 @@
 use crate::{block_header::BlockHeader, transaction::Transaction, utils, BitcoinError, Result};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Block {
     pub block_header: BlockHeader,
     pub transactions: Vec<Transaction>,

@@ -5,7 +5,7 @@ use crate::{
     BitcoinError, Result,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Transaction {
     pub version: u32,
     pub inputs: Vec<TransactionInput>,
@@ -77,7 +77,7 @@ impl Transaction {
         self.serialize().len()
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TransactionInput {
     pub previous_output: OutPoint,
     pub script_sig: Vec<u8>,
@@ -114,7 +114,7 @@ impl TransactionInput {
             + self.sequence.to_le_bytes().len()
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TransactionOutput {
     pub value: u64,
     pub script_pub_key: Vec<u8>,
@@ -143,7 +143,7 @@ impl TransactionOutput {
             + self.script_pub_key.len()
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OutPoint {
     pub hash: [u8; 32],
     pub index: u32,

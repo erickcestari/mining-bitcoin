@@ -53,7 +53,7 @@ impl BlockHeader {
         });
     }
 
-    pub fn serialize(&self) -> Vec<u8> {
+    pub fn serialize(&self) -> [u8; 80] {
         let mut payload = Vec::new();
         payload.extend_from_slice(&self.version.to_le_bytes());
         payload.extend_from_slice(&self.previous_block_hash);
@@ -61,6 +61,6 @@ impl BlockHeader {
         payload.extend_from_slice(&self.timestamp.to_le_bytes());
         payload.extend_from_slice(&self.bits.to_le_bytes());
         payload.extend_from_slice(&self.nonce.to_le_bytes());
-        payload
+        payload.try_into().unwrap()
     }
 }

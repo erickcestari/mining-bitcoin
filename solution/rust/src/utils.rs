@@ -1,18 +1,4 @@
-use sha2::{Digest, Sha256};
-
 use crate::{BitcoinError, Result};
-
-pub fn calculate_checksum(payload: &[u8]) -> [u8; 4] {
-    let hash1 = Sha256::digest(payload);
-    let hash2 = Sha256::digest(hash1);
-    let mut checksum = [0u8; 4];
-    checksum.copy_from_slice(&hash2[..4]);
-    checksum
-}
-
-pub fn double_sha256(payload: &[u8]) -> [u8; 32] {
-    Sha256::digest(Sha256::digest(payload)).into()
-}
 
 pub fn encode_varint(value: u64) -> Vec<u8> {
     let mut result = Vec::new();
@@ -69,5 +55,43 @@ pub fn decode_varint(payload: &[u8]) -> Result<(u64, usize)> {
             // Value is stored directly in the first byte.
             Ok((first_byte as u64, 1))
         }
+    }
+}
+
+pub fn bits_to_target(bits: u32) -> [u8; 32] {
+    let mut target = [0u8; 32];
+
+    let size = (bits >> 24) as usize;
+    let mut mantissa = bits & 0x007fffff;
+
+    if mantissa > 0x7fffff {
+        mantissa = 0x7fffff;
+    }
+
+    let start_pos = if size <= 32 { 32 - size } else { 0 };
+
+    if start_pos + 2 < 32 {
+        target[start_pos] = ((mantissa >> 16) & 0xff) as u8;
+        target[start_pos + 1] = ((mantissa >> 8) & 0xff) as u8;
+        target[start_pos + 2] = (mantissa & 0xff) as u8;
+    }
+
+    target
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bits_to_target() {
+        // Test case 1: Normal case
+        let bits = 0x1b0404cb;
+        let expected = [
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x04, 0xcb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00,
+        ];
+        assert_eq!(bits_to_target(bits), expected);
     }
 }
