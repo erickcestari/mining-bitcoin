@@ -3,6 +3,11 @@ name = "mine_block"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+opt-level = 3
+lto = true
+panic = "abort"
+
 [dependencies]
 anyhow = "1.0.95"
 hex = "0.4.3"

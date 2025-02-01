@@ -4,6 +4,7 @@ use sha2::{Digest, Sha256};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::thread;
+use std::time::Instant;
 
 pub struct Miner {
     pub block: Block,
@@ -15,6 +16,8 @@ impl Miner {
     }
 
     pub fn mine(self) -> Option<Block> {
+        let start_time = Instant::now();
+
         let num_workers = thread::available_parallelism()
             .map(|n| n.get())
             .unwrap_or(1);
@@ -69,6 +72,8 @@ impl Miner {
 
                         let mut mined_block = self.block.clone();
                         mined_block.block_header.nonce = nonce;
+                        let elapsed_time = start_time.elapsed();
+                        println!("Time to find the hash: {:?}", elapsed_time);
                         return Some(mined_block);
                     }
 
