@@ -7,9 +7,9 @@ use std::{
     io::Write,
     time::{SystemTime, UNIX_EPOCH},
 };
-fn main() {
-    let transaction_payload = hex::decode(TRANSACTION_SERIALIZED).unwrap();
-    let transaction = Transaction::deserialize(&transaction_payload).unwrap();
+fn main() -> anyhow::Result<()> {
+    let transaction_payload = hex::decode(TRANSACTION_SERIALIZED)?;
+    let transaction = Transaction::deserialize(&transaction_payload)?;
 
     let coinbase_transaction = Transaction {
         version: 1,
@@ -28,15 +28,11 @@ fn main() {
         locktime: 0,
     };
 
-    let previous_block_hash = hex::decode(PREVIOUS_BLOCK_HASH)
-        .unwrap()
+    let previous_block_hash: [u8; 32] = hex::decode(PREVIOUS_BLOCK_HASH)?
         .try_into()
-        .unwrap();
+        .map_err(|e: Vec<u8>| anyhow::anyhow!("Conversion error: {:?}", e))?;
 
-    let timestamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_secs() as u32;
+    let timestamp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() as u32;
 
     let mut transactions_txid = Vec::new();
     let txid = transaction.txid();
@@ -65,11 +61,13 @@ fn main() {
     match block_mined {
         Some(block) => {
             println!("valid block found {:?}", block);
-            let mut file = File::create("block.txt").unwrap();
-            writeln!(file, "{}", hex::encode(block.serialize())).unwrap();
+            let mut file = File::create("block.txt")?;
+            writeln!(file, "{}", hex::encode(block.serialize()))?;
         }
         None => {
             println!("No valid block found");
         }
     };
+
+    Ok(())
 }

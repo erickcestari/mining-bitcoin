@@ -17,6 +17,8 @@ impl MerkleRoot {
             let mut next_level = Vec::new();
 
             if current_level.len() % 2 == 1 {
+                // Odd number of hashes
+                // so it is safe to just push the last one
                 current_level.push(current_level.last().unwrap().clone());
             }
 
