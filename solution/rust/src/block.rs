@@ -1,4 +1,9 @@
-use crate::{block_header::BlockHeader, transaction::Transaction, utils, BitcoinError, Result};
+use crate::{
+    block_header::BlockHeader,
+    transaction::Transaction,
+    utils::{self, encode_varint},
+    BitcoinError, Result,
+};
 
 #[derive(Debug, Clone)]
 pub struct Block {
@@ -31,6 +36,16 @@ impl Block {
             block_header,
             transactions,
         })
+    }
+
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut payload = Vec::new();
+        payload.extend_from_slice(&self.block_header.serialize());
+        payload.extend_from_slice(&encode_varint(self.transactions.len() as u64));
+        for transaction in &self.transactions {
+            payload.extend_from_slice(&transaction.serialize());
+        }
+        payload
     }
 }
 

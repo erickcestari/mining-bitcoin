@@ -47,8 +47,7 @@ impl Transaction {
     }
 
     pub fn txid(&self) -> [u8; 32] {
-        let mut txid: [u8; 32] = Sha256::digest(Sha256::digest(&self.serialize())).into();
-        txid.reverse();
+        let txid: [u8; 32] = Sha256::digest(Sha256::digest(&self.serialize())).into();
         txid
     }
 
