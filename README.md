@@ -1,4 +1,4 @@
-# Mine a block
+# Mine a block - Vinteum challenge
 
 The goal of this project is to remine the mythic block 170 containing the first bitcoin transaction ever from Satoshi to Hal Finney.
 
